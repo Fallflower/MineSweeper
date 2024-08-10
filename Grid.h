@@ -2,7 +2,7 @@
 #define __GRID_H__
 
 #include "Assistance.h"
-enum NoteType{_UNSIGNED, _SIGNED, _SKEPTICAL};
+enum NoteType {_UNSIGNED, _SIGNED, _SKEPTICAL};
 
 class Grid
 {
