@@ -58,14 +58,26 @@ public:
         delete[] mineInfo;
     }
 
+    int getMineNum() const { return mineNum; }
+    int getNowMineNum() const {
+        int sum = 0;
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
+            {
+                if (mineInfo[i][j] == -1) sum++;
+            }
+        return sum;
+    }
+
     void init_after_first_click(const int& hi, const int& wi) {
         std::random_device rd;
         std::mt19937 rng(rd());
 
         int *iarr = new int[height*width];
+        for (int i = 0; i < height*width; i++)
+            iarr[i] = i;
+        
         int iarri = f(hi, wi);
-        for (int i = 0; i < height * width; i++)
-            iarr[i] = i + 1;
         
         std::shuffle(iarr, iarr + height*width, rng);
         int mN = mineNum;
@@ -75,13 +87,36 @@ public:
                 continue;
             }
             int mhi = iarr[i] / width;
-            int mwi = iarr[i] % width - 1;
+            int mwi = iarr[i] % width;
             mineInfo[mhi][mwi] = -1;
         }
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
                 check_mine_info(i, j);
+
+        delete[] iarr;
+    }
+
+    ostream& output(ostream& out) const {
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++) {
+                if (mineInfo[i][j] == -1) {
+                    out << "*";
+                } else {
+                    // out << gridMatrix[i][j];
+                    out << mineInfo[i][j];
+                }
+            }
+            out << endl;
+        }
+        return out;
     }
 };
+
+ostream& operator<<(ostream& out, const Board& b) {
+    b.output(out);
+    return out;
+}
 
 #endif
