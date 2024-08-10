@@ -2,7 +2,7 @@
 #define __GRID_H__
 
 #include "Assistance.h"
-enum NoteType{_SIGNED, _UNSIGNED, _SKEPTICAL};
+enum NoteType{_UNSIGNED, _SIGNED, _SKEPTICAL};
 
 class Grid
 {
@@ -11,10 +11,10 @@ private:
     bool mined;
 
 public:
-    Grid():note(_UNSIGNED), mined(0) {}
+    Grid() {}
     Grid(bool mine):note(_UNSIGNED), mined(mine) {}
 
-    bool noting() {
+    void noting() {
         note = NoteType((int(note) + 1)%3);
     }
 };
