@@ -10,10 +10,9 @@ private:
     unsigned int height, width;
     unsigned int mineNum;
     Grid **gridMatrix;
-    int **mineInfo;
 
     inline void check_mine_info(const int& hi, const int& wi) {
-        if (mineInfo[hi][wi] == -1) return;
+        if (gridMatrix[hi][wi].isMine()) return;
         int sum = 0;
         for (int i = -1; i < 2; i++)
         {
@@ -25,11 +24,11 @@ private:
                 int nwi = wi + j;
                 if (nwi < 0 || nwi >= width)
                     continue;
-                if (mineInfo[nhi][nwi] == -1)
+                if (gridMatrix[nhi][nwi].isMine())
                     sum++;
             }
         }
-        mineInfo[hi][wi] = sum;
+        gridMatrix[hi][wi].setMine(sum);
     }
 
     inline int f(const int& hi, const int& wi) {
@@ -40,22 +39,16 @@ public:
         if (h < 1 || w < 1) throw Error(403, "Invalid size of board");
         if (n < 1 || n >= h*w) throw Error(404, "Invalid mineNum");
         gridMatrix = new Grid*[height];
-        mineInfo = new int*[height];
         for (int i = 0; i < height; i++)
-        {
             gridMatrix[i] = new Grid[width];
-            mineInfo[i] = new int[width]{0};
-        }
     }
 
     ~Board() {
         for (int i = 0; i < height; i++)
         {
             delete[] gridMatrix[i];
-            delete[] mineInfo[i];
         }
         delete[] gridMatrix;
-        delete[] mineInfo;
     }
 
     int getMineNum() const { return mineNum; }
@@ -64,7 +57,7 @@ public:
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
             {
-                if (mineInfo[i][j] == -1) sum++;
+                if (gridMatrix[i][j].isMine()) sum++;
             }
         return sum;
     }
@@ -88,7 +81,7 @@ public:
             }
             int mhi = iarr[i] / width;
             int mwi = iarr[i] % width;
-            mineInfo[mhi][mwi] = -1;
+            gridMatrix[mhi][mwi].setMine(-1);
         }
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
@@ -101,11 +94,10 @@ public:
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++) {
-                if (mineInfo[i][j] == -1) {
+                if (gridMatrix[i][j].isMine()) {
                     out << "*";
                 } else {
-                    // out << gridMatrix[i][j];
-                    out << mineInfo[i][j];
+                    out << gridMatrix[i][j];
                 }
             }
             out << endl;
