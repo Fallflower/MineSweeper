@@ -33,7 +33,7 @@ private:
     }
 
     inline int f(const int& hi, const int& wi) {
-        return (hi + 1) * (wi + 1) - 1;
+        return (hi + 1) * width + wi;
     }
 public:
     Board(int h, int w, int n) : height(h), width(w), mineNum(n) {
